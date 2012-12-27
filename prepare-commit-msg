@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# A git hook script to add the currently playing iTunes track to
+# the end of your commit message.
+#
+# To enable this hook, copy it to {repo_name}/.git/hooks/prepare-commit-msg
+# and chmod +x .git/hooks/prepare-commit-msg
+#
+# Current version only supports OS X
+
+state=`osascript -e 'tell application "iTunes" to player state as string'`;
+
+if [ $state = "playing" ]; then
+	current_track=`osascript -e 'tell application "iTunes" to name of current track as string'`
+	# Head Like a Hole (Opal)
+
+	current_artist=`osascript -e 'tell application "iTunes" to artist of current track as string'`
+	# Nine Inch Nails
+
+	current_album=`osascript -e 'tell application "iTunes" to album of current track as string'`
+	# Head Like a Hole (UK Import)
+
+	current_genre=`osascript -e 'tell application "iTunes" to genre of current track as string'`
+	# Industrial
+
+	echo "\n$current_track - $current_artist - $current_album ($current_genre)" >> $1
+fi
